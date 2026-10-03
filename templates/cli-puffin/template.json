@@ -1,5 +1,5 @@
 {
-  "description": "Command line application using Puffin (async, events)",
+  "description": "Command line application with Puffin, spdlog and clipp",
   "replace": {
     "app_name": "{{name}}"
   }
