@@ -1,0 +1,28 @@
+{
+  "name": "create-puffin",
+  "version": "0.1.0",
+  "description": "Scaffold C++20 projects using the Puffin library",
+  "type": "module",
+  "bin": {
+    "create-puffin": "index.js"
+  },
+  "files": [
+    "index.js",
+    "templates"
+  ],
+  "engines": {
+    "node": ">=18.3"
+  },
+  "keywords": [
+    "puffin",
+    "cpp",
+    "cmake",
+    "scaffold",
+    "template"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4thlabs/create-puffin.git"
+  },
+  "license": "BSD-3-Clause"
+}

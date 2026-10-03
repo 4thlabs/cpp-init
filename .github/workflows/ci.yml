@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  templates:
+    name: ${{ matrix.template }} (${{ matrix.compiler.name }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [cli, cli-bare]
+        compiler:
+          - { name: gcc-13, cxx: g++-13 }
+          - { name: clang-18, cxx: clang++-18 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate
+        run: node index.js "$RUNNER_TEMP/app" --template ${{ matrix.template }} --yes
+      - name: Configure
+        working-directory: ${{ runner.temp }}/app
+        run: cmake --preset default
+        env:
+          CXX: ${{ matrix.compiler.cxx }}
+      - name: Build
+        working-directory: ${{ runner.temp }}/app
+        run: cmake --build --preset default
+      - name: Test
+        working-directory: ${{ runner.temp }}/app
+        run: ctest --preset default

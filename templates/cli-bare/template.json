@@ -1,0 +1,7 @@
+{
+  "description": "Command line application in plain C++20, without Puffin",
+  "puffin": false,
+  "replace": {
+    "puffin_app": "{{name}}"
+  }
+}
