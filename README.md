@@ -36,7 +36,7 @@ Requirements: Node 18.3 or newer to generate, a C++20 compiler and CMake 3.24 or
 | Template | Description |
 | --- | --- |
 | `cli` | Command line application in plain C++20. |
-| `cli-puffin` | Command line application using [Puffin](https://github.com/4thlabs/puffin) (`async`, `events`). |
+| `cli-puffin` | Command line application with [Puffin](https://github.com/4thlabs/puffin), [spdlog](https://github.com/gabime/spdlog) and [clipp](https://github.com/muellan/clipp). |
 
 ## Writing a template
 
