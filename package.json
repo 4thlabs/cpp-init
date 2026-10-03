@@ -1,10 +1,10 @@
 {
-  "name": "create-puffin",
+  "name": "cpp-init",
   "version": "0.1.0",
   "description": "Scaffold C++20 projects using the Puffin library",
   "type": "module",
   "bin": {
-    "create-puffin": "index.js"
+    "cpp-init": "index.js"
   },
   "files": [
     "index.js",
