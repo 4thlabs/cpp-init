@@ -1,7 +1,7 @@
 # app_name
 
 Uses [Puffin](https://github.com/4thlabs/puffin), [spdlog](https://github.com/gabime/spdlog) and
-[clipp](https://github.com/muellan/clipp), fetched by CMake at configure time with `FetchContent`. Link the Puffin
+[argparse](https://github.com/p-ranav/argparse), fetched by CMake at configure time with `FetchContent`. Link the Puffin
 modules you need in `CMakeLists.txt`, and change a `GIT_TAG` there to use another version.
 
 ## Build
