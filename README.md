@@ -1,9 +1,9 @@
-# create-puffin
+# cpp-init
 
 Scaffold a C++20 / CMake project, with or without [Puffin](https://github.com/4thlabs/puffin).
 
 ```sh
-npm create puffin@latest my-app
+npx @4thlabs/cpp-init@latest my-app
 # or, before the package is published to npm
 npx github:4thlabs/cpp-init my-app
 ```
@@ -12,8 +12,8 @@ Without arguments the command asks for the directory, the template, whether to u
 Every question can be answered on the command line instead:
 
 ```sh
-npm create puffin@latest my-app -- --template cli --puffin-version master
-npm create puffin@latest my-app -- --template cli --no-puffin
+npx @4thlabs/cpp-init@latest my-app --template cli --puffin-version master
+npx @4thlabs/cpp-init@latest my-app --template cli --no-puffin
 ```
 
 | Option | Description |

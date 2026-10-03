@@ -1,10 +1,10 @@
 {
-  "name": "create-puffin",
+  "name": "@4thlabs/cpp-init",
   "version": "0.1.0",
   "description": "Scaffold C++20 projects using the Puffin library",
   "type": "module",
   "bin": {
-    "create-puffin": "index.js"
+    "cpp-init": "index.js"
   },
   "files": [
     "index.js",
@@ -24,5 +24,8 @@
     "type": "git",
     "url": "git+https://github.com/4thlabs/cpp-init.git"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "publishConfig": {
+    "access": "public"
+  }
 }
