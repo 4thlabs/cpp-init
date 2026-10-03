@@ -1,5 +1,5 @@
 {
-  "description": "Command line application with Puffin, spdlog and clipp",
+  "description": "Command line application with Puffin, spdlog and argparse",
   "replace": {
     "app_name": "{{name}}"
   }

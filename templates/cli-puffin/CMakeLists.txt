@@ -19,17 +19,17 @@ FetchContent_Declare(spdlog
   GIT_TAG v1.17.0
   GIT_SHALLOW ON
 )
-# clipp master: the v1.2.3 release has no CMakeLists.txt
-FetchContent_Declare(clipp
-  GIT_REPOSITORY https://github.com/muellan/clipp.git
-  GIT_TAG 2c32b2f1f7cc530b1ec1f62c92f698643bb368db
+FetchContent_Declare(argparse
+  GIT_REPOSITORY https://github.com/p-ranav/argparse.git
+  GIT_TAG v3.2
+  GIT_SHALLOW ON
 )
-FetchContent_MakeAvailable(puffin spdlog clipp)
+FetchContent_MakeAvailable(puffin spdlog argparse)
 
 add_executable(app_name src/main.cpp)
 
 # Puffin modules: puffin::async, puffin::webkit, puffin::imdb, puffin::events, puffin::ioc, puffin::maths, puffin::common
-target_link_libraries(app_name PRIVATE spdlog::spdlog clipp::clipp)
+target_link_libraries(app_name PRIVATE spdlog::spdlog argparse::argparse)
 target_compile_definitions(app_name PRIVATE APP_NAME="${PROJECT_NAME}" APP_VERSION="${PROJECT_VERSION}")
 
 if(BUILD_TESTING)

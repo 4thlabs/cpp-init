@@ -1,31 +1,23 @@
-#include <clipp.h>
+#include <argparse/argparse.hpp>
 #include <spdlog/spdlog.h>
 
+#include <exception>
 #include <iostream>
 
 int main(int argc, char** argv)
 {
-  bool help = false;
-  bool version = false;
-  bool verbose = false;
+  argparse::ArgumentParser cli(APP_NAME, APP_VERSION);
 
-  auto cli = (
-    clipp::option("-h", "--help").set(help) % "show this help",
-    clipp::option("-v", "--version").set(version) % "show the version",
-    clipp::option("--verbose").set(verbose) % "enable debug logs"
-  );
+  cli.add_argument("--verbose").help("enable debug logs").flag();
 
-  if (!clipp::parse(argc, argv, cli) || help) {
-    std::cout << clipp::make_man_page(cli, APP_NAME);
-    return help ? 0 : 1;
+  try {
+    cli.parse_args(argc, argv);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << '\n' << cli;
+    return 1;
   }
 
-  if (version) {
-    std::cout << APP_NAME << ' ' << APP_VERSION << '\n';
-    return 0;
-  }
-
-  if (verbose)
+  if (cli.get<bool>("--verbose"))
     spdlog::set_level(spdlog::level::debug);
 
   spdlog::info("Hello from {}", APP_NAME);
