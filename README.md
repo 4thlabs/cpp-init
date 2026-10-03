@@ -41,15 +41,19 @@ Requirements: Node 18.3 or newer to generate, a C++20 compiler and CMake 3.24 or
 ## Writing a template
 
 A template is a folder of `templates/` holding a real project that configures and builds as is, plus a
-`template.json` with its description:
+`template.json`:
 
 ```json
 {
-  "description": "Command line application in plain C++20"
+  "description": "Command line application in plain C++20",
+  "replace": {
+    "app_name": "{{name}}"
+  }
 }
 ```
 
-- Every `app_name` in the template files is replaced by the project name (the directory name, lowercased).
+- `replace` maps a string found in the template files to its value in the generated project. `{{name}}` is the
+  project name (the directory name, lowercased). The templates use `app_name` as the project name placeholder.
 - Name `.gitignore` as `_gitignore`, npm strips `.gitignore` files when publishing.
 
 CI generates and builds every template with GCC and Clang.

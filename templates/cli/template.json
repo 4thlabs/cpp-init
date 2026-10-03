@@ -1,3 +1,6 @@
 {
-  "description": "Command line application in plain C++20"
+  "description": "Command line application in plain C++20",
+  "replace": {
+    "app_name": "{{name}}"
+  }
 }

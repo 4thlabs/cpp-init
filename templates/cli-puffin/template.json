@@ -1,3 +1,6 @@
 {
-  "description": "Command line application using Puffin (async, events)"
+  "description": "Command line application using Puffin (async, events)",
+  "replace": {
+    "app_name": "{{name}}"
+  }
 }

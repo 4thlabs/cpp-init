@@ -12,9 +12,6 @@ import { parseArgs } from 'node:util';
 
 const TEMPLATES_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates');
 
-// Placeholder used in the template files, replaced by the project name.
-const NAME_PLACEHOLDER = 'app_name';
-
 // Files npm would strip or rename when publishing are stored with a leading underscore.
 const RENAMED_FILES = { _gitignore: '.gitignore' };
 
@@ -51,7 +48,7 @@ function isEmptyDir(dir) {
   return !fs.existsSync(dir) || fs.readdirSync(dir).filter((f) => f !== '.git').length === 0;
 }
 
-function copyTemplate(srcDir, destDir, name) {
+function copyTemplate(srcDir, destDir, replacements) {
   fs.mkdirSync(destDir, { recursive: true });
 
   for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
@@ -61,11 +58,13 @@ function copyTemplate(srcDir, destDir, name) {
     const dest = path.join(destDir, RENAMED_FILES[entry.name] ?? entry.name);
 
     if (entry.isDirectory()) {
-      copyTemplate(src, dest, name);
+      copyTemplate(src, dest, replacements);
       continue;
     }
 
-    fs.writeFileSync(dest, fs.readFileSync(src, 'utf8').replaceAll(NAME_PLACEHOLDER, name));
+    let content = fs.readFileSync(src, 'utf8');
+    for (const [from, to] of replacements) content = content.replaceAll(from, to);
+    fs.writeFileSync(dest, content);
   }
 }
 
@@ -117,7 +116,8 @@ async function main() {
     }
 
     const name = toProjectName(directory);
-    copyTemplate(path.join(TEMPLATES_DIR, template.id), destDir, name);
+    const replacements = Object.entries(template.replace ?? {}).map(([from, to]) => [from, to.replaceAll('{{name}}', name)]);
+    copyTemplate(path.join(TEMPLATES_DIR, template.id), destDir, replacements);
 
     const relative = path.relative(process.cwd(), destDir) || '.';
     console.log(`\nCreated ${name} from the ${template.id} template in ${relative}\n`);
