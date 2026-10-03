@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// cpp-init: scaffold a C++20 project from one of the templates in ./templates.
+// cpp-init: scaffold a C++ project from one of the templates in ./templates.
 //
-//   npx @4thlabs/cpp-init@latest [directory] [--template cli --puffin-version master --no-puffin]
+//   npx @4thlabs/cpp-init@latest [directory] [--template cli]
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,6 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 
 const TEMPLATES_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'templates');
-const DEFAULT_PUFFIN_VERSION = 'master';
 
 // Files npm would strip or rename when publishing are stored with a leading underscore.
 const RENAMED_FILES = { _gitignore: '.gitignore' };
@@ -19,12 +18,10 @@ const RENAMED_FILES = { _gitignore: '.gitignore' };
 const HELP = `Usage: npx @4thlabs/cpp-init@latest [directory] [options]
 
 Options:
-  -t, --template <name>       Template to use (see the list below)
-      --no-puffin             Use the variant of the template without Puffin
-      --puffin-version <ref>  Puffin git tag, branch or commit (default: ${DEFAULT_PUFFIN_VERSION})
-  -f, --force                 Write into a non-empty directory
-  -y, --yes                   Accept the defaults for every question
-  -h, --help                  Show this help
+  -t, --template <name>  Template to use (see the list below)
+  -f, --force            Write into a non-empty directory
+  -y, --yes              Accept the defaults for every question
+  -h, --help             Show this help
 
 Templates:
 `;
@@ -39,18 +36,12 @@ function loadTemplates() {
     });
 }
 
-// Templates offered in the first question: the ones with Puffin, their bare variants are picked with --no-puffin.
-function mainTemplates(templates) {
-  const variants = new Set(templates.map((t) => t.bare).filter(Boolean));
-  return templates.filter((t) => !variants.has(t.id));
-}
-
 function toProjectName(directory) {
   return path
     .basename(path.resolve(directory))
     .toLowerCase()
     .replace(/[^a-z0-9_-]+/g, '-')
-    .replace(/^[-_]+|[-_]+$/g, '') || 'puffin-app';
+    .replace(/^[-_]+|[-_]+$/g, '') || 'my-app';
 }
 
 function isEmptyDir(dir) {
@@ -82,8 +73,6 @@ async function main() {
     allowPositionals: true,
     options: {
       template: { type: 'string', short: 't' },
-      'no-puffin': { type: 'boolean' },
-      'puffin-version': { type: 'string' },
       force: { type: 'boolean', short: 'f' },
       yes: { type: 'boolean', short: 'y' },
       help: { type: 'boolean', short: 'h' },
@@ -91,10 +80,9 @@ async function main() {
   });
 
   const templates = loadTemplates();
-  const choices = mainTemplates(templates);
 
   if (values.help) {
-    console.log(HELP + choices.map((t) => `  ${t.id.padEnd(12)} ${t.description}`).join('\n'));
+    console.log(HELP + templates.map((t) => `  ${t.id.padEnd(12)} ${t.description}`).join('\n'));
     return;
   }
 
@@ -107,30 +95,20 @@ async function main() {
   };
 
   try {
-    const directory = positionals[0] ?? (await ask('Project directory?', 'puffin-app'));
+    const directory = positionals[0] ?? (await ask('Project directory?', 'my-app'));
 
     let templateId = values.template;
     if (!templateId) {
       if (rl) {
         console.log('Templates:');
-        choices.forEach((t, i) => console.log(`  ${i + 1}. ${t.id.padEnd(12)} ${t.description}`));
+        templates.forEach((t, i) => console.log(`  ${i + 1}. ${t.id.padEnd(12)} ${t.description}`));
       }
-      const answer = await ask('Template?', choices[0].id);
-      templateId = choices[Number(answer) - 1]?.id ?? answer;
+      const answer = await ask('Template?', templates[0].id);
+      templateId = templates[Number(answer) - 1]?.id ?? answer;
     }
 
-    let template = templates.find((t) => t.id === templateId);
+    const template = templates.find((t) => t.id === templateId);
     if (!template) throw new Error(`unknown template "${templateId}", run with --help to list them`);
-
-    let withPuffin = !values['no-puffin'];
-    if (template.bare && withPuffin && !values.template) {
-      withPuffin = !/^n/i.test(await ask('Use Puffin?', 'yes'));
-    }
-    if (!withPuffin && template.bare) template = templates.find((t) => t.id === template.bare);
-
-    const puffinVersion = template.puffin
-      ? values['puffin-version'] ?? (await ask('Puffin version (git tag, branch or commit)?', DEFAULT_PUFFIN_VERSION))
-      : null;
 
     const destDir = path.resolve(directory);
     if (!isEmptyDir(destDir) && !values.force) {
@@ -138,11 +116,7 @@ async function main() {
     }
 
     const name = toProjectName(directory);
-    const replacements = Object.entries(template.replace ?? {}).map(([from, to]) => [
-      from,
-      to.replaceAll('{{name}}', name).replaceAll('{{puffin_version}}', puffinVersion ?? ''),
-    ]);
-
+    const replacements = Object.entries(template.replace ?? {}).map(([from, to]) => [from, to.replaceAll('{{name}}', name)]);
     copyTemplate(path.join(TEMPLATES_DIR, template.id), destDir, replacements);
 
     const relative = path.relative(process.cwd(), destDir) || '.';
