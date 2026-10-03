@@ -5,7 +5,7 @@ Scaffold a C++20 / CMake project, with or without [Puffin](https://github.com/4t
 ```sh
 npm create puffin@latest my-app
 # or, before the package is published to npm
-npx github:4thlabs/create-puffin my-app
+npx github:4thlabs/cpp-init my-app
 ```
 
 Without arguments the command asks for the directory, the template, whether to use Puffin and which Puffin version.
