@@ -1,7 +1,7 @@
 {
   "name": "@4thlabs/cpp-init",
   "version": "0.1.0",
-  "description": "Scaffold C++20 projects using the Puffin library",
+  "description": "Scaffold C++ / CMake projects from templates",
   "type": "module",
   "bin": {
     "cpp-init": "index.js"
@@ -14,11 +14,11 @@
     "node": ">=18.3"
   },
   "keywords": [
-    "puffin",
     "cpp",
     "cmake",
     "scaffold",
-    "template"
+    "template",
+    "init"
   ],
   "repository": {
     "type": "git",

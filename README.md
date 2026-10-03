@@ -1,6 +1,6 @@
 # cpp-init
 
-Scaffold a C++20 / CMake project, with or without [Puffin](https://github.com/4thlabs/puffin).
+Scaffold a C++ / CMake project from a template.
 
 ```sh
 npx @4thlabs/cpp-init@latest my-app
@@ -8,19 +8,15 @@ npx @4thlabs/cpp-init@latest my-app
 npx github:4thlabs/cpp-init my-app
 ```
 
-Without arguments the command asks for the directory, the template, whether to use Puffin and which Puffin version.
-Every question can be answered on the command line instead:
+Without arguments the command asks for the directory and the template. Both can be given on the command line instead:
 
 ```sh
-npx @4thlabs/cpp-init@latest my-app --template cli --puffin-version master
-npx @4thlabs/cpp-init@latest my-app --template cli --no-puffin
+npx @4thlabs/cpp-init@latest my-app --template cli
 ```
 
 | Option | Description |
 | --- | --- |
 | `-t, --template <name>` | Template to use. |
-| `--no-puffin` | Use the variant of the template without Puffin. |
-| `--puffin-version <ref>` | Puffin git tag, branch or commit, `master` by default. |
 | `-f, --force` | Write into a non-empty directory. |
 | `-y, --yes` | Accept the defaults for every question. |
 
@@ -39,30 +35,21 @@ Requirements: Node 18.3 or newer to generate, a C++20 compiler and CMake 3.24 or
 
 | Template | Description |
 | --- | --- |
-| `cli` | Command line application using `puffin::async` and `puffin::events`. |
-| `cli-bare` | The same application in plain C++20, picked by `cli --no-puffin`. |
+| `cli` | Command line application in plain C++20. |
+| `cli-puffin` | Command line application using [Puffin](https://github.com/4thlabs/puffin) (`async`, `events`). |
 
 ## Writing a template
 
 A template is a folder of `templates/` holding a real project that configures and builds as is, plus a
-`template.json`:
+`template.json` with its description:
 
 ```json
 {
-  "description": "Command line application using Puffin (async, events)",
-  "puffin": true,
-  "bare": "cli-bare",
-  "replace": {
-    "puffin_app": "{{name}}",
-    "GIT_TAG master": "GIT_TAG {{puffin_version}}"
-  }
+  "description": "Command line application in plain C++20"
 }
 ```
 
-- `replace` maps a string found in the template files to its value in the generated project. `{{name}}` is the
-  project name (the directory name, lowercased), `{{puffin_version}}` the chosen Puffin version.
-- `puffin` tells whether the template uses Puffin, so whether to ask for its version.
-- `bare` names the variant without Puffin. Bare variants are not listed in the template question.
+- Every `app_name` in the template files is replaced by the project name (the directory name, lowercased).
 - Name `.gitignore` as `_gitignore`, npm strips `.gitignore` files when publishing.
 
 CI generates and builds every template with GCC and Clang.

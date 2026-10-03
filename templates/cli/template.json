@@ -1,9 +1,3 @@
 {
-  "description": "Command line application using Puffin (async, events)",
-  "puffin": true,
-  "bare": "cli-bare",
-  "replace": {
-    "puffin_app": "{{name}}",
-    "GIT_TAG master": "GIT_TAG {{puffin_version}}"
-  }
+  "description": "Command line application in plain C++20"
 }
