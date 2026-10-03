@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // cpp-init: scaffold a C++20 project from one of the templates in ./templates.
 //
-//   npx cpp-init@latest [directory] [--template cli --puffin-version master --no-puffin]
+//   npx @4thlabs/cpp-init@latest [directory] [--template cli --puffin-version master --no-puffin]
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +16,7 @@ const DEFAULT_PUFFIN_VERSION = 'master';
 // Files npm would strip or rename when publishing are stored with a leading underscore.
 const RENAMED_FILES = { _gitignore: '.gitignore' };
 
-const HELP = `Usage: npx cpp-init@latest [directory] [options]
+const HELP = `Usage: npx @4thlabs/cpp-init@latest [directory] [options]
 
 Options:
   -t, --template <name>       Template to use (see the list below)
