@@ -7,28 +7,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CTest)
-include(FetchContent)
+include(cmake/CPM.cmake)
 
-FetchContent_Declare(puffin
-  GIT_REPOSITORY https://github.com/4thlabs/puffin.git
-  GIT_TAG master
-  GIT_SHALLOW ON
-)
-FetchContent_Declare(spdlog
-  GIT_REPOSITORY https://github.com/gabime/spdlog.git
-  GIT_TAG v1.17.0
-  GIT_SHALLOW ON
-)
-FetchContent_Declare(argparse
-  GIT_REPOSITORY https://github.com/p-ranav/argparse.git
-  GIT_TAG v3.2
-  GIT_SHALLOW ON
-)
-FetchContent_MakeAvailable(puffin spdlog argparse)
+# Standalone asio has no CMakeLists.txt, expose it as asio::asio
+CPMAddPackage(NAME asio GITHUB_REPOSITORY chriskohlhoff/asio GIT_TAG asio-1-38-2 DOWNLOAD_ONLY YES)
+find_package(Threads REQUIRED)
+add_library(asio INTERFACE)
+add_library(asio::asio ALIAS asio)
+target_include_directories(asio SYSTEM INTERFACE ${asio_SOURCE_DIR}/asio/include)
+target_compile_definitions(asio INTERFACE ASIO_STANDALONE)
+target_link_libraries(asio INTERFACE Threads::Threads)
+
+# Lets Puffin build its asio adapters (puffin::async_asio, puffin::webkit_asio) on this asio
+set(PUFFIN_ASIO_INCLUDE_DIR ${asio_SOURCE_DIR}/asio/include CACHE PATH "")
+
+CPMAddPackage("gh:4thlabs/puffin#master")
+CPMAddPackage("gh:gabime/spdlog@1.17.0")
+CPMAddPackage("gh:p-ranav/argparse@3.2")
 
 add_executable(app_name src/main.cpp)
 
-# Puffin modules: puffin::async, puffin::webkit, puffin::imdb, puffin::events, puffin::ioc, puffin::maths, puffin::common
+# Also available: asio::asio and the Puffin modules puffin::async, puffin::async_asio, puffin::webkit,
+# puffin::webkit_asio, puffin::webkit_asio_ssl (when OpenSSL is installed), puffin::imdb, puffin::events,
+# puffin::ioc, puffin::maths, puffin::common
 target_link_libraries(app_name PRIVATE spdlog::spdlog argparse::argparse)
 target_compile_definitions(app_name PRIVATE APP_NAME="${PROJECT_NAME}" APP_VERSION="${PROJECT_VERSION}")
 

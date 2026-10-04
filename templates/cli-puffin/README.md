@@ -1,8 +1,10 @@
 # app_name
 
-Uses [Puffin](https://github.com/4thlabs/puffin), [spdlog](https://github.com/gabime/spdlog) and
-[argparse](https://github.com/p-ranav/argparse), fetched by CMake at configure time with `FetchContent`. Link the Puffin
-modules you need in `CMakeLists.txt`, and change a `GIT_TAG` there to use another version.
+Uses [Puffin](https://github.com/4thlabs/puffin), [spdlog](https://github.com/gabime/spdlog),
+[argparse](https://github.com/p-ranav/argparse) and [asio](https://think-async.com/Asio/), fetched by
+[CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) at configure time. Link the asio and Puffin targets you need in
+`CMakeLists.txt`, and change a version in its `CPMAddPackage` calls to use another one. Set `CPM_SOURCE_CACHE` (for
+example `export CPM_SOURCE_CACHE=$HOME/.cache/CPM`) to share the downloads between projects.
 
 ## Build
 
