@@ -28,7 +28,8 @@ CPMAddPackage("gh:p-ranav/argparse@3.2")
 add_executable(app_name src/main.cpp)
 
 # Also available: asio::asio and the Puffin modules puffin::async, puffin::async_asio, puffin::webkit,
-# puffin::webkit_asio, puffin::imdb, puffin::events, puffin::ioc, puffin::maths, puffin::common
+# puffin::webkit_asio, puffin::webkit_asio_ssl (when OpenSSL is installed), puffin::imdb, puffin::events,
+# puffin::ioc, puffin::maths, puffin::common
 target_link_libraries(app_name PRIVATE spdlog::spdlog argparse::argparse)
 target_compile_definitions(app_name PRIVATE APP_NAME="${PROJECT_NAME}" APP_VERSION="${PROJECT_VERSION}")
 
