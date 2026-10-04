@@ -1,5 +1,5 @@
 {
-  "description": "Command line application with Puffin, spdlog and argparse",
+  "description": "Command line application with Puffin, spdlog, argparse and asio (CPM.cmake)",
   "replace": {
     "app_name": "{{name}}"
   }
